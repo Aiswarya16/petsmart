@@ -1,24 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pets/ui/screen/adoption_form.dart';
 import 'package:pets/ui/widget/custom_button.dart';
 
-class PetDetailsScreen extends StatelessWidget {
+class PetDetailsScreen extends StatefulWidget {
   const PetDetailsScreen({super.key});
 
+  @override
+  State<PetDetailsScreen> createState() => _PetDetailsScreenState();
+}
+
+class _PetDetailsScreenState extends State<PetDetailsScreen> {
+  bool isFavorite = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 3,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
+        ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              isFavorite = !isFavorite;
+              setState(() {});
+            },
             icon: Icon(
-              Icons.favorite_border,
-              color: Colors.black,
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: Colors.red,
             ),
           ),
         ],
@@ -124,7 +141,12 @@ class PetDetailsScreen extends StatelessWidget {
               child: CustomButton(
                 text: "Adopt Now",
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AdoptionForm(),
+                    ),
+                  );
                 },
               ),
             ),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'home_screen_section/accessories_screen.dart';
+import 'package:pets/ui/screen/home_screen_section/accessories_section_screen.dart';
+import 'package:pets/ui/screen/home_screen_section/doctors_and_trainers_screen.dart';
+import 'package:pets/ui/screen/home_screen_section/listing_screen.dart';
+import 'package:pets/ui/screen/home_screen_section/profile_screen.dart';
 import 'home_screen_section/adoption_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +27,24 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
   }
 
+  String getName() {
+    switch (_controller.index) {
+      case 0:
+        return 'Adopt a Friend';
+      case 1:
+        return 'Accessories';
+      case 2:
+        return 'Doctors and Trainers';
+      case 3:
+        return 'Profile';
+      case 4:
+        return 'Listing';
+
+      default:
+        return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen>
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          'Adopt a Friend',
+          getName(),
           style: GoogleFonts.piazzolla(
             textStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
                   color: Colors.black,
@@ -52,18 +73,12 @@ class _HomeScreenState extends State<HomeScreen>
       body: SafeArea(
         child: TabBarView(
           controller: _controller,
-          children: [
-            const AdoptionSection(),
-            const AccessoriesSection(),
-            Container(
-              color: Colors.red,
-            ),
-            Container(
-              color: Colors.blue,
-            ),
-            Container(
-              color: Colors.green,
-            ),
+          children: const [
+            AdoptionSection(),
+            Accessories(),
+            DoctorsAndTrainersScreen(),
+            ProfileScreen(),
+            ListingScreen(),
           ],
         ),
       ),

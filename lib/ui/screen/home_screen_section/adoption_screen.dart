@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pets/ui/screen/pet_details_screen.dart';
+import 'package:pets/ui/widget/categories_item.dart';
 import 'package:pets/ui/widget/custom_button.dart';
 import 'package:pets/ui/widget/custom_input_field.dart';
+import 'package:pets/ui/widget/custom_item.dart';
 
 class AdoptionSection extends StatefulWidget {
   const AdoptionSection({super.key});
@@ -151,115 +154,36 @@ class _AdoptionSectionState extends State<AdoptionSection> {
             ),
           ],
         ),
-        GridView.count(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          childAspectRatio: 1 / 1.5,
-          crossAxisCount: 2,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 5,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          children: [
-            PetItem(),
-            PetItem(),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: GridView.count(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            childAspectRatio: 1 / 1.5,
+            crossAxisCount: 2,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            children: List<Widget>.generate(
+              10,
+              (index) => CustomItem(
+                image: 'assets/images/nintendogs.png',
+                title: 'Nintendogs',
+                subtitleOne: '30,000',
+                subtitleTwo: 'Female  2 yrs',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PetDetailsScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
         ),
       ],
-    );
-  }
-}
-
-class PetItem extends StatelessWidget {
-  const PetItem({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      elevation: 3,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 8,
-        ),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset('assets/images/nintendogs.png'),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'Nintendogs',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  '30,000',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'Female 2 years',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CategoriesItem extends StatelessWidget {
-  final String imagePath, label;
-  final Function() onTap;
-  const CategoriesItem({
-    super.key,
-    required this.imagePath,
-    required this.label,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Image.asset(
-            imagePath,
-          ),
-          const SizedBox(
-            height: 3,
-          ),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-        ],
-      ),
     );
   }
 }

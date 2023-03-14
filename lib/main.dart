@@ -1,15 +1,25 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:pets/ui/screen/home_screen_section/accessories_section_screen.dart';
+import 'package:pets/ui/screen/home_screen_section/accessories_section_screen.dart';
+import 'package:pets/ui/screen/address.dart';
 import 'package:pets/ui/screen/adoption_form.dart';
+
 import 'package:pets/ui/screen/forgotpassword_screen.dart';
 import 'package:pets/ui/screen/home_screen.dart';
+
+import 'package:pets/ui/screen/home_screen_section/adoption_screen.dart';
+import 'package:pets/ui/screen/home_screen_section/profile_screen.dart';
+
 import 'package:pets/ui/screen/login_screen.dart';
+import 'package:pets/ui/screen/accessories_details_screen.dart';
 import 'package:pets/ui/screen/pet_details_screen.dart';
 
 import 'package:pets/ui/screen/resetpassword_screen.dart';
 import 'package:pets/ui/screen/signup_screen.dart';
 import 'package:pets/ui/screen/signup_screen.dart';
+
 import 'package:pets/ui/screen/verify_screen.dart';
 
 void main() {
@@ -27,7 +37,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: AdoptionForm());
+        home: HomeScreen());
   }
 }
 

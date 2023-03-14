@@ -5,6 +5,9 @@ class CustomButton extends StatelessWidget {
   final Color? buttonColor, labelColor, iconColor;
   final IconData? iconData;
   final Function() onTap;
+  final bool hasBorder;
+  final double? elevation;
+  final FontWeight? fontWeight;
   const CustomButton({
     super.key,
     this.text,
@@ -13,6 +16,9 @@ class CustomButton extends StatelessWidget {
     this.labelColor,
     this.iconColor,
     this.iconData,
+    this.hasBorder = false,
+    this.elevation,
+    this.fontWeight,
   });
 
   @override
@@ -23,12 +29,14 @@ class CustomButton extends StatelessWidget {
         height: 60,
         width: MediaQuery.of(context).size.width,
         child: Material(
-          elevation: 4,
+          elevation: elevation ?? 4,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6),
-            side: BorderSide(
-              color: Color.fromARGB(255, 17, 107, 180),
-            ),
+            side: hasBorder
+                ? const BorderSide(
+                    color: Color(0xFFD9D9D9),
+                  )
+                : BorderSide.none,
           ),
           color: buttonColor ?? Color.fromARGB(255, 17, 107, 180),
           child: Row(
@@ -45,10 +53,9 @@ class CustomButton extends StatelessWidget {
                       child: Text(
                         text ?? '',
                         textAlign: TextAlign.center,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(color: labelColor ?? Colors.white),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: labelColor ?? Colors.white,
+                            fontWeight: fontWeight ?? FontWeight.bold),
                       ),
                     )
                   : const SizedBox(),
