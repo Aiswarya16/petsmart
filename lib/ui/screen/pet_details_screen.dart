@@ -127,7 +127,8 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
             SizedBox(
               width: 75,
               child: CustomButton(
-                iconData: Icons.phone,
+                label: '',
+                icon: Icons.phone,
                 buttonColor: Colors.blue[200],
                 iconColor: Colors.blue,
                 onTap: () {},
@@ -139,7 +140,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
             SizedBox(
               width: 300,
               child: CustomButton(
-                text: "Adopt Now",
+                label: "Adopt Now",
                 onTap: () {
                   Navigator.push(
                     context,

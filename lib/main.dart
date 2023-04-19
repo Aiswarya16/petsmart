@@ -1,28 +1,13 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:pets/ui/screen/home_screen_section/accessories_section_screen.dart';
-import 'package:pets/ui/screen/home_screen_section/accessories_section_screen.dart';
-import 'package:pets/ui/screen/address.dart';
-import 'package:pets/ui/screen/adoption_form.dart';
-
-import 'package:pets/ui/screen/forgotpassword_screen.dart';
-import 'package:pets/ui/screen/home_screen.dart';
-
-import 'package:pets/ui/screen/home_screen_section/adoption_screen.dart';
-import 'package:pets/ui/screen/home_screen_section/profile_screen.dart';
-
 import 'package:pets/ui/screen/login_screen.dart';
-import 'package:pets/ui/screen/accessories_details_screen.dart';
-import 'package:pets/ui/screen/pet_details_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:pets/ui/screen/resetpassword_screen.dart';
-import 'package:pets/ui/screen/signup_screen.dart';
-import 'package:pets/ui/screen/signup_screen.dart';
-
-import 'package:pets/ui/screen/verify_screen.dart';
-
-void main() {
+void main() async {
+  await Supabase.initialize(
+    url: 'https://twboseihwcgjstzwiydz.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3Ym9zZWlod2NnanN0endpeWR6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTg5MjA5NiwiZXhwIjoxOTk3NDY4MDk2fQ.mwglsiZ4XQO9mNc1kAcJ1b-QPrEYWCilx3x0OCAtyJI',
+  );
   runApp(const MyApp());
 }
 
@@ -32,12 +17,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'User',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      debugShowCheckedModeBanner: false,
+      title: 'User',
+      theme: ThemeData(
+        primarySwatch: Colors.pink,
+        inputDecorationTheme: InputDecorationTheme(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          fillColor: Colors.pink[50],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(color: Colors.pink, width: 0.5),
+          ),
         ),
-        home: HomeScreen());
+      ),
+      home: LoginScreen(),
+    );
   }
 }
 

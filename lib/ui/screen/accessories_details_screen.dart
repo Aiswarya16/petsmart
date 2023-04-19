@@ -145,40 +145,38 @@ class AccessoriesDetailsScreen extends StatelessWidget {
               const SizedBox(
                 height: 5,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                child: CustomButton(
-                  text: 'View Similer',
-                  onTap: () {},
-                  hasBorder: true,
-                  buttonColor: Colors.white,
-                  labelColor: Colors.black,
-                  elevation: 0,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 15, right: 15),
+              //   child: CustomButton(
+              //     text: 'View Similer',
+              //     onTap: () {},
+              //     buttonColor: Colors.white,
+              //     labelColor: Colors.black,
+              //     elevation: 0,
+              //   ),
+              // ),
               const SizedBox(
                 height: 10,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomButton(
-                      text: 'Add to cart',
-                      onTap: () {},
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: CustomButton(
-                      text: 'Buy now',
-                      onTap: () {},
-                    ),
-                  )
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: CustomButton(
+              //         text: 'Add to cart',
+              //         onTap: () {},
+              //       ),
+              //     ),
+              //     const SizedBox(
+              //       width: 10,
+              //     ),
+              //     Expanded(
+              //       child: CustomButton(
+              //         text: 'Buy now',
+              //         onTap: () {},
+              //       ),
+              //     )
+              //   ],
+              // ),
             ],
           ),
         ),
