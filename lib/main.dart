@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'User',
+      title: 'PetsMart',
       theme: ThemeData(
         primarySwatch: Colors.pink,
         inputDecorationTheme: InputDecorationTheme(

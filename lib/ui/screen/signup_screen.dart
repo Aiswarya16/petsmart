@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pets/blocs/auth/sign_in/sign_in_bloc.dart';
 import 'package:pets/blocs/auth/sign_up/sign_up_bloc.dart';
 import 'package:pets/ui/screen/home_screen.dart';
+import 'package:pets/ui/widget/custom_alert_dialog.dart';
 import 'package:pets/ui/widget/custom_button.dart';
 import 'package:pets/ui/widget/custom_card.dart';
 import 'package:pets/ui/widget/custom_input_form_field.dart';
@@ -86,11 +87,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           if (state is SignUpFailureState) {
                             showDialog(
                               context: context,
-                              builder: (context) => const AlertDialog(
-                                title: Text("Register Failed"),
-                                content: Text(
-                                  'Please check your email and password and try again.',
-                                ),
+                              builder: (context) => const CustomAlertDialog(
+                                title: 'Resister Failed',
+                                message:
+                                    'Please check you email and password and try again',
+                                primaryButtonLabel: 'Ok',
                               ),
                             );
                           } else if (state is SignUpSuccessState) {
@@ -225,6 +226,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 CustomInputFormField(
                                   controller: _phoneController,
                                   labelText: 'Phone',
+                                  keyboardType: TextInputType.phone,
                                   prefixIcon: Icons.phone_android,
                                   validator: (value) {
                                     if (value != null &&
@@ -243,29 +245,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   label: 'Register',
                                   buttonColor: Colors.blue,
                                   labelColor: Colors.white,
-                                  isLoading: state is SignInLoadingState,
+                                  isLoading: state is SignUpLoadingState,
                                   onTap: () {
                                     if (_formKey.currentState!.validate()) {
-                                      // String email =
-                                      //     _emailController.text.trim();
-                                      // String password =
-                                      //     _passwordController.text.trim();
-                                      // String phone =
-                                      //     _phoneController.text.trim();
-                                      // String name = _nameController.text.trim();
+                                      String email =
+                                          _emailController.text.trim();
+                                      String password =
+                                          _passwordController.text.trim();
+                                      String phone =
+                                          _phoneController.text.trim();
+                                      String name = _nameController.text.trim();
 
-                                      // BlocProvider.of<SignUpBloc>(context).add(
-                                      //   SignUpEvent(
-                                      //     email: email,
-                                      //     password: password,
-                                      //     name: name,
-                                      //     phone: phone,
-                                      //   ),
-                                      // );
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const HomeScreen(),
+                                      BlocProvider.of<SignUpBloc>(context).add(
+                                        SignUpEvent(
+                                          email: email,
+                                          password: password,
+                                          name: name,
+                                          phone: phone,
                                         ),
                                       );
                                     }

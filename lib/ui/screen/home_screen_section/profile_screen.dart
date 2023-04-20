@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pets/ui/screen/complaints.dart';
 import 'package:pets/ui/screen/favourites_screen.dart';
+import 'package:pets/ui/screen/login_screen.dart';
 import 'package:pets/ui/screen/suggestions.dart';
 import 'package:pets/ui/widget/change_password_dialog.dart';
 import 'package:pets/ui/widget/custom_card.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,6 +15,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -79,8 +82,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SettingsCard(
                   icon: Icons.logout_outlined,
-                  label: 'Logout',
-                  onTap: () {},
+                  label: isLoading ? 'Logging out...' : 'Logout',
+                  onTap: isLoading
+                      ? () {}
+                      : () async {
+                          isLoading = true;
+                          setState(() {});
+
+                          await Supabase.instance.client.auth.signOut();
+
+                          isLoading = false;
+                          setState(() {});
+
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                            (route) => true,
+                          );
+                        },
                 ),
               ],
             ),

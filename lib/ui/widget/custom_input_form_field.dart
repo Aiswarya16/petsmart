@@ -8,6 +8,7 @@ class CustomInputFormField extends StatelessWidget {
   final String labelText;
   final int maxLines;
   final bool isObscure;
+  final TextInputType? keyboardType;
   const CustomInputFormField({
     super.key,
     required this.controller,
@@ -17,6 +18,7 @@ class CustomInputFormField extends StatelessWidget {
     required this.labelText,
     this.maxLines = 1,
     this.isObscure = false,
+    this.keyboardType,
   });
 
   @override
@@ -25,6 +27,7 @@ class CustomInputFormField extends StatelessWidget {
       maxLines: maxLines,
       controller: controller,
       obscureText: isObscure,
+      keyboardType: keyboardType,
       validator: (value) => validator!(value),
       decoration: InputDecoration(
         labelText: labelText,

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pets/blocs/auth/sign_in/sign_in_bloc.dart';
 import 'package:pets/ui/screen/home_screen.dart';
 import 'package:pets/ui/screen/signup_screen.dart';
+import 'package:pets/ui/widget/custom_alert_dialog.dart';
 import 'package:pets/ui/widget/custom_button.dart';
 import 'package:pets/ui/widget/custom_card.dart';
 import 'package:pets/ui/widget/custom_input_form_field.dart';
@@ -21,10 +22,11 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     Future.delayed(const Duration(milliseconds: 100), () {
       if (Supabase.instance.client.auth.currentUser != null) {
-        Navigator.of(context).push(
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const HomeScreen(),
           ),
+          (route) => true,
         );
       }
     });
@@ -68,11 +70,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (state is SignInFailureState) {
                             showDialog(
                               context: context,
-                              builder: (context) => const AlertDialog(
-                                title: Text("Login Failed"),
-                                content: Text(
-                                  'Please check your email and password and try again.',
-                                ),
+                              builder: (context) => const CustomAlertDialog(
+                                title: 'Login Failed',
+                                message:
+                                    'Please check you email and password and try again',
+                                primaryButtonLabel: 'Ok',
                               ),
                             );
                           } else if (state is SignInSuccessState) {
@@ -179,21 +181,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isLoading: state is SignInLoadingState,
                                   onTap: () {
                                     if (_formKey.currentState!.validate()) {
-                                      // String email =
-                                      //     _emailController.text.trim();
-                                      // String password =
-                                      //     _passwordController.text.trim();
+                                      String email =
+                                          _emailController.text.trim();
+                                      String password =
+                                          _passwordController.text.trim();
 
-                                      // BlocProvider.of<SignInBloc>(context).add(
-                                      //   SignInEvent(
-                                      //     email: email,
-                                      //     password: password,
-                                      //   ),
-                                      // );
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const HomeScreen(),
+                                      BlocProvider.of<SignInBloc>(context).add(
+                                        SignInEvent(
+                                          email: email,
+                                          password: password,
                                         ),
                                       );
                                     }
@@ -206,7 +202,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   label: 'Register',
                                   buttonColor: Colors.blue,
                                   labelColor: Colors.white,
-                                  isLoading: state is SignInLoadingState,
                                   onTap: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(

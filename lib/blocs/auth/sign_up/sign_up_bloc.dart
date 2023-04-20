@@ -11,7 +11,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     on<SignUpEvent>((event, emit) async {
       emit(SignUpLoadingState());
       SupabaseClient supabaseClient = Supabase.instance.client;
-      SupabaseQueryBuilder queryTable = supabaseClient.from('profile');
+      SupabaseQueryBuilder queryTable = supabaseClient.from('profiles');
       try {
         UserResponse userResponse =
             await Supabase.instance.client.auth.admin.createUser(
