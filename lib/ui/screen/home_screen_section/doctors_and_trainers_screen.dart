@@ -12,7 +12,7 @@ class DoctorsAndTrainersScreen extends StatefulWidget {
 }
 
 class _DoctorsAndTrainersScreenState extends State<DoctorsAndTrainersScreen> {
-  int? groupValue = 0;
+  String? groupValue = 'doctor';
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -32,50 +32,22 @@ class _DoctorsAndTrainersScreenState extends State<DoctorsAndTrainersScreen> {
               groupValue: groupValue,
               padding: const EdgeInsets.symmetric(
                 horizontal: 10,
-                vertical: 5,
+                vertical: 10,
               ),
               children: {
-                0: Material(
-                  borderRadius: BorderRadius.circular(5),
-                  color: groupValue == 0 ? Colors.pink : Colors.pink[50],
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        'Doctors',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(
-                              color:
-                                  groupValue == 0 ? Colors.white : Colors.pink,
-                              fontWeight: FontWeight.w500,
-                            ),
+                'doctor': Text(
+                  'Doctors',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
                       ),
-                    ),
-                  ),
                 ),
-                1: Material(
-                  borderRadius: BorderRadius.circular(5),
-                  color: groupValue == 1 ? Colors.pink : Colors.pink[50],
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        'Trainers',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(
-                              color:
-                                  groupValue == 1 ? Colors.white : Colors.pink,
-                              fontWeight: FontWeight.w500,
-                            ),
+                'trainer': Text(
+                  'Trainers',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
                       ),
-                    ),
-                  ),
                 ),
               },
               onValueChanged: (value) {
@@ -87,7 +59,7 @@ class _DoctorsAndTrainersScreenState extends State<DoctorsAndTrainersScreen> {
               color: Colors.black54,
               height: 20,
             ),
-            groupValue == 0
+            groupValue == 'doctor'
                 ? Expanded(
                     child: SingleChildScrollView(
                       child: Wrap(
