@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pets/ui/screen/pet_details_screen.dart';
 import 'package:pets/ui/widget/categories_item.dart';
-import 'package:pets/ui/widget/custom_button.dart';
-import 'package:pets/ui/widget/custom_input_field.dart';
-import 'package:pets/ui/widget/custom_item.dart';
 import 'package:pets/ui/widget/custom_search.dart';
 import 'package:pets/ui/widget/listing_card.dart';
 
@@ -60,7 +57,7 @@ class _AdoptionSectionState extends State<AdoptionSection> {
           GridView.count(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            childAspectRatio: 1 / 1.25,
+            childAspectRatio: 1 / 1.35,
             crossAxisCount: 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,

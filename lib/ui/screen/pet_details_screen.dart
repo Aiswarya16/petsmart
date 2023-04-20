@@ -266,7 +266,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                               uri,
                             );
                           },
-                          color: Colors.teal,
+                          color: Colors.green[600]!,
                         ),
                       ),
                       const SizedBox(

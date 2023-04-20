@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen>
       case 3:
         return 'Orders';
       case 4:
-        return 'Profile';
+        return 'More';
 
       default:
         return '';
@@ -54,24 +54,12 @@ class _HomeScreenState extends State<HomeScreen>
         title: Text(
           getName(),
           style: GoogleFonts.piazzolla(
-            textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
+            textStyle: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: Colors.pink,
                   fontWeight: FontWeight.bold,
                 ),
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.exit_to_app_outlined,
-                color: Colors.pink,
-              ),
-            ),
-          ),
-        ],
       ),
       body: SafeArea(
         child: TabBarView(
@@ -139,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 NavBarItem(
                   isSelected: _controller.index == 4,
-                  icon: Icons.person_2_outlined,
+                  icon: Icons.more_horiz_outlined,
                   onTap: () {
                     _controller.animateTo(4);
                     setState(() {});
@@ -169,8 +157,14 @@ class NavBarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child:
-          Icon(icon, size: 30, color: isSelected ? Colors.pink : Colors.grey),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 5,
+          vertical: 1,
+        ),
+        child:
+            Icon(icon, size: 30, color: isSelected ? Colors.pink : Colors.grey),
+      ),
     );
   }
 }

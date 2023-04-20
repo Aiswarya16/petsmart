@@ -59,6 +59,15 @@ class _ListingCardState extends State<ListingCard> {
                   ),
             ),
             const SizedBox(
+              height: 2.5,
+            ),
+            Text(
+              '1 year',
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: Colors.grey[800],
+                  ),
+            ),
+            const SizedBox(
               height: 10,
             ),
             Row(
