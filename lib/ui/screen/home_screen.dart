@@ -76,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen>
       body: SafeArea(
         child: TabBarView(
           controller: _controller,
+          physics: const NeverScrollableScrollPhysics(),
           children: const [
             AdoptionSection(),
             ListingScreen(),

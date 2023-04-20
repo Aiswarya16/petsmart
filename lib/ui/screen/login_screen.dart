@@ -55,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   right: 20,
                 ),
                 child: CustomCard(
+                  color: Colors.white.withOpacity(0.7),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,

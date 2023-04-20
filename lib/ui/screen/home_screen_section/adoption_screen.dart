@@ -67,21 +67,16 @@ class _AdoptionSectionState extends State<AdoptionSection> {
             padding: const EdgeInsets.symmetric(vertical: 10),
             children: List<Widget>.generate(
               10,
-              (index) => const ListingCard(),
-              // CustomItem(
-              //   image: 'assets/images/nintendogs.png',
-              //   title: 'Nintendogs',
-              //   subtitleOne: '30,000',
-              //   subtitleTwo: 'Female  2 yrs',
-              //   onTap: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => const PetDetailsScreen(),
-              //       ),
-              //     );
-              //   },
-              // ),
+              (index) => ListingCard(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PetDetailsScreen(),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],

@@ -51,6 +51,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
               height: MediaQuery.of(context).size.height,
               fit: BoxFit.cover,
             ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 10,
+                top: 10,
+              ),
+              child: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
             Align(
               alignment: Alignment.center,
               child: Padding(
@@ -59,7 +73,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   right: 20,
                 ),
                 child: CustomCard(
-                  color: Colors.blue[50],
+                  color: Colors.white.withOpacity(0.7),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
