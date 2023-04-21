@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pets/blocs/auth/sign_in/sign_in_bloc.dart';
 import 'package:pets/blocs/auth/sign_up/sign_up_bloc.dart';
 import 'package:pets/ui/screen/home_screen.dart';
 import 'package:pets/ui/widget/custom_alert_dialog.dart';

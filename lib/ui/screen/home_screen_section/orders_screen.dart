@@ -34,14 +34,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 vertical: 10,
               ),
               children: {
-                'orderd': Text(
+                'ordered': Text(
                   'Ordered',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
                 ),
-                'Completed': Text(
+                'completed': Text(
                   'Completed',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: Colors.black,
