@@ -3,15 +3,20 @@ import 'package:pets/ui/widget/custom_action_button.dart';
 import 'package:pets/ui/widget/custom_card.dart';
 import 'package:pets/ui/widget/custom_icon_button.dart';
 import 'package:pets/ui/widget/label_with_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class DoctorCard extends StatefulWidget {
-  const DoctorCard({super.key});
+class DoctorTrainerCard extends StatefulWidget {
+  final dynamic docTrainDetails;
+  const DoctorTrainerCard({
+    super.key,
+    required this.docTrainDetails,
+  });
 
   @override
-  State<DoctorCard> createState() => _DoctorCardState();
+  State<DoctorTrainerCard> createState() => _DoctorTrainerCardState();
 }
 
-class _DoctorCardState extends State<DoctorCard> {
+class _DoctorTrainerCardState extends State<DoctorTrainerCard> {
   @override
   Widget build(BuildContext context) {
     return CustomCard(
@@ -24,18 +29,18 @@ class _DoctorCardState extends State<DoctorCard> {
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Expanded(
                   child: LabelWithText(
                     label: 'Name',
-                    text: 'Peter',
+                    text: widget.docTrainDetails['name'],
                   ),
                 ),
                 Expanded(
                   child: LabelWithText(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     label: 'Phone',
-                    text: '9876152342',
+                    text: widget.docTrainDetails['phone'],
                   ),
                 ),
               ],
@@ -46,18 +51,18 @@ class _DoctorCardState extends State<DoctorCard> {
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Expanded(
                   child: LabelWithText(
                     label: 'Address',
-                    text: 'address line 1, address line 2',
+                    text: widget.docTrainDetails['address_line'],
                   ),
                 ),
                 Expanded(
                   child: LabelWithText(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     label: 'Place',
-                    text: 'Kannur',
+                    text: widget.docTrainDetails['place'],
                   ),
                 ),
               ],
@@ -68,18 +73,18 @@ class _DoctorCardState extends State<DoctorCard> {
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Expanded(
                   child: LabelWithText(
                     label: 'District',
-                    text: 'Kannur',
+                    text: widget.docTrainDetails['district'],
                   ),
                 ),
                 Expanded(
                   child: LabelWithText(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     label: 'State',
-                    text: 'Kerala',
+                    text: widget.docTrainDetails['state'],
                   ),
                 ),
               ],
@@ -87,9 +92,9 @@ class _DoctorCardState extends State<DoctorCard> {
             const SizedBox(
               height: 10,
             ),
-            const LabelWithText(
+            LabelWithText(
               label: 'Pin',
-              text: '670301',
+              text: widget.docTrainDetails['pin_code'],
             ),
             const Divider(
               color: Colors.black54,
@@ -102,18 +107,11 @@ class _DoctorCardState extends State<DoctorCard> {
                   child: CustomIconButton(
                     iconData: Icons.call_outlined,
                     color: Colors.green[600]!,
-                    onPressed: () {},
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  flex: 3,
-                  child: CustomActionButton(
-                    iconData: Icons.map_outlined,
-                    onPressed: () {},
-                    label: 'Location',
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse('tel:${widget.docTrainDetails['phone']}'),
+                      );
+                    },
                   ),
                 ),
               ],

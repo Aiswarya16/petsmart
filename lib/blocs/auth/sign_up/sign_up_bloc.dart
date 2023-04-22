@@ -32,6 +32,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
               'name': event.name,
               'phone': userResponse.user!.phone,
               'user_id': userResponse.user!.id,
+              'email': userResponse.user!.email,
             },
           );
         }
