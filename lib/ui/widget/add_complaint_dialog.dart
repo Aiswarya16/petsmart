@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pets/blocs/complaint/complaint_bloc.dart';
 import 'package:pets/ui/widget/custom_alert_dialog.dart';
 
 class AddComplaintDialog extends StatefulWidget {
@@ -11,14 +13,12 @@ class AddComplaintDialog extends StatefulWidget {
 }
 
 class _AddComplaintDialogState extends State<AddComplaintDialog> {
-  bool _isLoading = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _complaintController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return CustomAlertDialog(
-      isLoading: _isLoading,
       title: 'Complaint',
       message: 'Send your concerns to PetsMart.',
       content: Form(
@@ -50,30 +50,14 @@ class _AddComplaintDialogState extends State<AddComplaintDialog> {
         ),
       ),
       primaryButtonLabel: 'Send',
-      primaryOnPressed: () async {
-        try {
-          if (_formKey.currentState!.validate()) {
-            _isLoading = true;
-            setState(() {});
-            // await Supabase.instance.client.auth.updateUser(
-            //   UserAttributes(
-            //     password: _complaintController.text.trim(),
-            //   ),
-            // );
-            _isLoading = false;
-            setState(() {});
-            // ignore: use_build_context_synchronously
-            Navigator.pop(context);
-          }
-        } catch (e) {
-          showDialog(
-            context: context,
-            builder: (context) => CustomAlertDialog(
-              title: 'Failed!',
-              message: e.toString(),
-              primaryButtonLabel: 'Ok',
+      primaryOnPressed: () {
+        if (_formKey.currentState!.validate()) {
+          BlocProvider.of<ComplaintBloc>(context).add(
+            AddComplaintEvent(
+              complaint: _complaintController.text.trim(),
             ),
           );
+          Navigator.pop(context);
         }
       },
       secondaryButtonLabel: 'Cancel',

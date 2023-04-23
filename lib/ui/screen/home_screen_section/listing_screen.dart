@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pets/blocs/manage_listings/manage_listings_bloc.dart';
 import 'package:pets/ui/screen/listings/add_edit_listing_screen.dart';
-import 'package:pets/ui/screen/pet_details_screen.dart';
 import 'package:pets/ui/widget/custom_action_button.dart';
 import 'package:pets/ui/widget/custom_alert_dialog.dart';
 import 'package:pets/ui/widget/listing_card.dart';

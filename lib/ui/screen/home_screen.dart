@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen>
               ListingScreen(
                 manageListingsBloc: manageListingsBloc,
               ),
-              DoctorsAndTrainersScreen(),
+              const DoctorsAndTrainersScreen(),
               OrdersScreen(
                 manageListingsBloc: manageListingsBloc,
               ),

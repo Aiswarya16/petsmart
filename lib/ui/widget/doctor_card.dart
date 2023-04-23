@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pets/ui/widget/custom_action_button.dart';
 import 'package:pets/ui/widget/custom_card.dart';
 import 'package:pets/ui/widget/custom_icon_button.dart';
 import 'package:pets/ui/widget/label_with_text.dart';

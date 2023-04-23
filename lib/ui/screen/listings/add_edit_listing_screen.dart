@@ -1,7 +1,5 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pets/ui/widget/category_selector.dart';
 import 'package:pets/ui/widget/custom_action_button.dart';
 import 'package:pets/ui/widget/custom_alert_dialog.dart';
