@@ -355,16 +355,33 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                       const SizedBox(
                         width: 20,
                       ),
-                      Expanded(
-                        flex: 3,
-                        child: CustomActionButton(
-                          iconData: Icons.pets_outlined,
-                          onPressed: () {
-                            makePayment();
-                          },
-                          label: 'Adopt',
+                      if (widget.listDetails['bought_by'] == null)
+                        Expanded(
+                          flex: 3,
+                          child: CustomActionButton(
+                            iconData: Icons.pets_outlined,
+                            onPressed: () {
+                              makePayment();
+                            },
+                            label: 'Adopt',
+                          ),
                         ),
-                      ),
+                      if (widget.listDetails['bought_by'] != null &&
+                          widget.listDetails['status'] != 'complete')
+                        Expanded(
+                          flex: 3,
+                          child: CustomActionButton(
+                            iconData: Icons.done,
+                            onPressed: () {
+                              widget.manageListingsBloc.add(
+                                CollectMyOrderListingsEvent(
+                                    listingId: widget.listDetails['id']),
+                              );
+                              Navigator.pop(context);
+                            },
+                            label: 'Collected',
+                          ),
+                        ),
                     ],
                   ),
                   const SizedBox(

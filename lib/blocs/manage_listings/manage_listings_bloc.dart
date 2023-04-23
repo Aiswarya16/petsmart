@@ -86,6 +86,54 @@ class ManageListingsBloc
               listings: listings,
             ),
           );
+        }
+        if (event is GetMyOrderListingsEvent) {
+          List<dynamic> temp = [];
+
+          temp = await queryTable
+              .select('*')
+              .eq('bought_by', supabaseClient.auth.currentUser!.id)
+              .eq('status', event.status)
+              .order('bought_at', ascending: false);
+
+          List<Map<String, dynamic>> listings =
+              temp.map((e) => e as Map<String, dynamic>).toList();
+
+          for (int i = 0; i < listings.length; i++) {
+            listings[i]['images'] = await imageTable
+                .select('*')
+                .eq('pet_listing_id', listings[i]['id']);
+
+            listings[i]['category'] = await categoryTable
+                .select('*')
+                .eq('id', listings[i]['category_id'])
+                .single();
+            listings[i]['profile'] = await profileTable
+                .select('*')
+                .eq('user_id', listings[i]['by_user_id'])
+                .single();
+
+            listings[i]['favorite'] = (await favoritesTable
+                    .select('*')
+                    .eq('user_id', supabaseClient.auth.currentUser!.id)
+                    .eq('pet_listing_id', listings[i]['id'])
+                    .maybeSingle() !=
+                null);
+          }
+          Logger().w(listings);
+          emit(
+            MyOrdersListingsSuccessState(
+              listings: listings,
+            ),
+          );
+        } else if (event is CollectMyOrderListingsEvent) {
+          await queryTable.update(
+            {
+              'status': 'complete',
+            },
+          ).eq('id', event.listingId);
+
+          add(GetMyOrderListingsEvent(status: 'orderd'));
         } else if (event is FavoriteListingsEvent) {
           if (event.favorite) {
             await favoritesTable.upsert(

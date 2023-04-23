@@ -123,3 +123,15 @@ class OrderListingsEvent extends ManageListingsEvent {
     required this.listingId,
   });
 }
+
+class GetMyOrderListingsEvent extends ManageListingsEvent {
+  final String status;
+
+  GetMyOrderListingsEvent({required this.status});
+}
+
+class CollectMyOrderListingsEvent extends ManageListingsEvent {
+  final int listingId;
+
+  CollectMyOrderListingsEvent({required this.listingId});
+}

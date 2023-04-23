@@ -79,7 +79,9 @@ class _HomeScreenState extends State<HomeScreen>
                 manageListingsBloc: manageListingsBloc,
               ),
               DoctorsAndTrainersScreen(),
-              OrdersScreen(),
+              OrdersScreen(
+                manageListingsBloc: manageListingsBloc,
+              ),
               ProfileScreen(),
             ],
           ),
