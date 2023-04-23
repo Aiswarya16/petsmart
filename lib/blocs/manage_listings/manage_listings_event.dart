@@ -99,10 +99,12 @@ class GetAllListingsEvent extends ManageListingsEvent {
 class GetOthersListingsEvent extends ManageListingsEvent {
   final String? query;
   final int? categoryId;
+  final bool favorite;
 
   GetOthersListingsEvent({
     this.query,
     this.categoryId,
+    this.favorite = false,
   });
 }
 

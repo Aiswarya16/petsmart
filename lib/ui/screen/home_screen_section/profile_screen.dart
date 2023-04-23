@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pets/blocs/manage_listings/manage_listings_bloc.dart';
 import 'package:pets/ui/screen/complaints.dart';
 import 'package:pets/ui/screen/favourites_screen.dart';
 import 'package:pets/ui/screen/login_screen.dart';
@@ -8,7 +9,8 @@ import 'package:pets/ui/widget/custom_card.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final ManageListingsBloc manageListingsBloc;
+  const ProfileScreen({super.key, required this.manageListingsBloc});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -65,7 +67,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const FavouritesScreen(),
+                        builder: (context) => FavouritesScreen(
+                          manageListingsBloc: widget.manageListingsBloc,
+                        ),
                       ),
                     );
                   },

@@ -82,7 +82,9 @@ class _HomeScreenState extends State<HomeScreen>
               OrdersScreen(
                 manageListingsBloc: manageListingsBloc,
               ),
-              ProfileScreen(),
+              ProfileScreen(
+                manageListingsBloc: manageListingsBloc,
+              ),
             ],
           ),
         ),

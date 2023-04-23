@@ -23,6 +23,12 @@ class MyOrdersListingsSuccessState extends ManageListingsState {
   MyOrdersListingsSuccessState({required this.listings});
 }
 
+class FavoriteListingsSuccessState extends ManageListingsState {
+  final List<Map<String, dynamic>> listings;
+
+  FavoriteListingsSuccessState({required this.listings});
+}
+
 class ManageListingsLoadingState extends ManageListingsState {}
 
 class ManageListingsFailureState extends ManageListingsState {

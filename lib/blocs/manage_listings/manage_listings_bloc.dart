@@ -80,12 +80,24 @@ class ManageListingsBloc
                     .maybeSingle() !=
                 null);
           }
-          Logger().w(listings);
-          emit(
-            OthersListingsSuccessState(
-              listings: listings,
-            ),
-          );
+
+          if (event.favorite) {
+            listings =
+                listings.where((element) => element['favorite']).toList();
+            Logger().w(listings);
+            emit(
+              FavoriteListingsSuccessState(
+                listings: listings,
+              ),
+            );
+          } else {
+            Logger().w(listings);
+            emit(
+              OthersListingsSuccessState(
+                listings: listings,
+              ),
+            );
+          }
         }
         if (event is GetMyOrderListingsEvent) {
           List<dynamic> temp = [];
