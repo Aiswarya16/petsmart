@@ -16,10 +16,89 @@ class ManageListingsBloc
       emit(ManageListingsLoadingState());
       SupabaseClient supabaseClient = Supabase.instance.client;
       SupabaseQueryBuilder queryTable = supabaseClient.from('pet_listings');
+      SupabaseQueryBuilder categoryTable =
+          supabaseClient.from('pet_categories');
+      SupabaseQueryBuilder favoritesTable = supabaseClient.from('favorites');
+      SupabaseQueryBuilder profileTable = supabaseClient.from('profiles');
       SupabaseQueryBuilder imageTable =
           supabaseClient.from('pet_listing_images');
       try {
-        if (event is GetAllListingsEvent) {
+        if (event is GetOthersListingsEvent) {
+          List<dynamic> temp = [];
+
+          if (event.query != null && event.categoryId != null) {
+            temp = await queryTable
+                .select('*')
+                .neq('by_user_id', supabaseClient.auth.currentUser!.id)
+                .ilike('title', '%${event.query}%')
+                .eq('category_id', event.categoryId)
+                .order('title', ascending: true);
+          } else if (event.query != null) {
+            temp = await queryTable
+                .select('*')
+                .neq('by_user_id', supabaseClient.auth.currentUser!.id)
+                .ilike('title', '%${event.query}%')
+                .order('title', ascending: true);
+          } else if (event.categoryId != null) {
+            temp = await queryTable
+                .select('*')
+                .neq('by_user_id', supabaseClient.auth.currentUser!.id)
+                .eq('category_id', event.categoryId)
+                .order('title', ascending: true);
+          } else {
+            temp = await queryTable
+                .select('*')
+                .neq('by_user_id', supabaseClient.auth.currentUser!.id)
+                .order('title', ascending: true);
+          }
+
+          List<Map<String, dynamic>> listings =
+              temp.map((e) => e as Map<String, dynamic>).toList();
+
+          for (int i = 0; i < listings.length; i++) {
+            listings[i]['images'] = await imageTable
+                .select('*')
+                .eq('pet_listing_id', listings[i]['id']);
+
+            listings[i]['category'] = await categoryTable
+                .select('*')
+                .eq('id', listings[i]['category_id'])
+                .single();
+            listings[i]['profile'] = await profileTable
+                .select('*')
+                .eq('user_id', listings[i]['by_user_id'])
+                .single();
+
+            listings[i]['favorite'] = (await favoritesTable
+                    .select('*')
+                    .eq('user_id', supabaseClient.auth.currentUser!.id)
+                    .eq('pet_listing_id', listings[i]['id'])
+                    .maybeSingle() !=
+                null);
+          }
+          Logger().w(listings);
+          emit(
+            OthersListingsSuccessState(
+              listings: listings,
+            ),
+          );
+        } else if (event is FavoriteListingsEvent) {
+          if (event.favorite) {
+            await favoritesTable.upsert(
+              {
+                'pet_listing_id': event.listingId,
+                'user_id': supabaseClient.auth.currentUser!.id,
+              },
+            );
+          } else {
+            await favoritesTable
+                .delete()
+                .eq('pet_listing_id', event.listingId)
+                .eq('user_id', supabaseClient.auth.currentUser!.id);
+          }
+
+          add(GetOthersListingsEvent());
+        } else if (event is GetAllListingsEvent) {
           List<dynamic> temp = [];
 
           if (event.query != null) {

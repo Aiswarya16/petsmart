@@ -95,3 +95,23 @@ class GetAllListingsEvent extends ManageListingsEvent {
     this.query,
   });
 }
+
+class GetOthersListingsEvent extends ManageListingsEvent {
+  final String? query;
+  final int? categoryId;
+
+  GetOthersListingsEvent({
+    this.query,
+    this.categoryId,
+  });
+}
+
+class FavoriteListingsEvent extends ManageListingsEvent {
+  final int listingId;
+  final bool favorite;
+
+  FavoriteListingsEvent({
+    required this.listingId,
+    required this.favorite,
+  });
+}

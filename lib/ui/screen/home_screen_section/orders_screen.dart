@@ -75,12 +75,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       listingDetails: {},
                       manageListingsBloc: ManageListingsBloc(),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PetDetailsScreen(),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const PetDetailsScreen(),
+                        //   ),
+                        // );
                       },
                     ),
                   ),

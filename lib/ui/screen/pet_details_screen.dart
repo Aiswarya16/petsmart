@@ -1,13 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:intl/intl.dart';
+import 'package:pets/blocs/manage_listings/manage_listings_bloc.dart';
 import 'package:pets/ui/widget/custom_action_button.dart';
 import 'package:pets/ui/widget/custom_icon_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PetDetailsScreen extends StatefulWidget {
+  final ManageListingsBloc manageListingsBloc;
+  final dynamic listDetails;
   const PetDetailsScreen({
     super.key,
+    required this.manageListingsBloc,
+    required this.listDetails,
   });
 
   @override
@@ -16,6 +22,12 @@ class PetDetailsScreen extends StatefulWidget {
 
 class _PetDetailsScreenState extends State<PetDetailsScreen> {
   bool isFavorite = false;
+  @override
+  void initState() {
+    super.initState();
+    isFavorite = widget.listDetails['favorite'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +47,12 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
           IconButton(
             onPressed: () {
               isFavorite = !isFavorite;
+              widget.manageListingsBloc.add(
+                FavoriteListingsEvent(
+                  listingId: widget.listDetails['id'],
+                  favorite: isFavorite,
+                ),
+              );
               setState(() {});
             },
             icon: Icon(
@@ -52,17 +70,18 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
               height: 20,
             ),
             FlutterCarousel.builder(
-              itemCount: 4,
+              itemCount: widget.listDetails['images'].length,
               itemBuilder: (context, itemIndex, pageViewIndex) => ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: CachedNetworkImage(
                   fit: BoxFit.cover,
-                  imageUrl:
-                      'https://images.unsplash.com/photo-1676641244234-855100cee031?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+                  imageUrl: widget.listDetails['images'][itemIndex]
+                      ['image_url'],
+                  width: MediaQuery.of(context).size.width - 60,
                 ),
               ),
               options: CarouselOptions(
-                height: 300,
+                height: MediaQuery.of(context).size.width - 60,
                 enlargeCenterPage: true,
                 showIndicator: true,
                 slideIndicator: const CircularSlideIndicator(
@@ -83,7 +102,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Dog',
+                    widget.listDetails['category']['category'],
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: Colors.grey,
                         ),
@@ -92,7 +111,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                     height: 5,
                   ),
                   Text(
-                    'Dobermann for sale',
+                    widget.listDetails['title'],
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: Colors.black,
                         ),
@@ -101,7 +120,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                     height: 2.5,
                   ),
                   Text(
-                    'Male',
+                    widget.listDetails['gender'],
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Colors.grey[800],
                         ),
@@ -110,7 +129,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                     height: 10,
                   ),
                   Text(
-                    '₹20000',
+                    '₹${widget.listDetails['price'].toString()}',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Colors.red[800],
                           decoration: TextDecoration.lineThrough,
@@ -120,7 +139,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                     height: 2.5,
                   ),
                   Text(
-                    '₹15000',
+                    '₹${widget.listDetails['discounted_price']}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: Colors.green,
                           fontWeight: FontWeight.bold,
@@ -130,7 +149,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                     height: 5,
                   ),
                   Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis a felis non ante porta suscipit. Mauris aliquam, lorem at tincidunt efficitur, nulla purus vehicula dolor, ultricies fermentum nibh enim et ligula. Sed ac viverra mi. Curabitur nec leo sodales, euismod mauris a, dignissim urna. Nunc accumsan purus ex, et eleifend ligula consectetur vel. Praesent scelerisque commodo ligula vitae rutrum. Aliquam pretium tortor et nunc dictum, ac lobortis tellus tempus. Mauris congue nunc sed massa iaculis ultrices vitae nec ipsum.',
+                    widget.listDetails['description'],
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
@@ -160,7 +179,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                             height: 2.5,
                           ),
                           Text(
-                            'Peter',
+                            widget.listDetails['profile']['name'],
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge
@@ -188,7 +207,9 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                             height: 2.5,
                           ),
                           Text(
-                            '19/04/2023',
+                            DateFormat('dd/MM/yyyy hh:mm a').format(
+                                DateTime.parse(
+                                    widget.listDetails['created_at'])),
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall
@@ -205,7 +226,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                     height: 5,
                   ),
                   Text(
-                    'address line1, address line 2, some place',
+                    '${widget.listDetails['address_line']}, ${widget.listDetails['place']}',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
@@ -215,7 +236,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                     height: 2.5,
                   ),
                   Text(
-                    'some city',
+                    widget.listDetails['district'],
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
@@ -225,7 +246,7 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                     height: 2.5,
                   ),
                   Text(
-                    'some district',
+                    widget.listDetails['state'],
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
@@ -235,20 +256,11 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                     height: 2.5,
                   ),
                   Text(
-                    'Pin 670321',
+                    'Pin ${widget.listDetails['pin_code']}',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
                         ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CustomActionButton(
-                    iconData: Icons.map_outlined,
-                    onPressed: () {},
-                    label: 'Location',
-                    color: Colors.purple,
                   ),
                   const Divider(
                     height: 30,
@@ -261,7 +273,8 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                         child: CustomIconButton(
                           iconData: Icons.call_rounded,
                           onPressed: () async {
-                            Uri uri = Uri.parse('tel:9876543210');
+                            Uri uri =
+                                Uri.parse('tel:${widget.listDetails['phone']}');
                             await launchUrl(
                               uri,
                             );

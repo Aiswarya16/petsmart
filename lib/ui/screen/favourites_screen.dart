@@ -63,12 +63,12 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
                         listingDetails: {},
                         manageListingsBloc: ManageListingsBloc(),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const PetDetailsScreen(),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const PetDetailsScreen(),
+                          //   ),
+                          // );
                         },
                       ),
                     ),

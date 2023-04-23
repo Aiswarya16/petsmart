@@ -44,8 +44,8 @@ class _ListingCardState extends State<ListingCard> {
                 child: Image.network(
                   widget.listingDetails['images'][0]['image_url'],
                   fit: BoxFit.cover,
-                  width: MediaQuery.of(context).size.width - 60,
-                  height: MediaQuery.of(context).size.width - 60,
+                  width: (MediaQuery.of(context).size.width - 100) / 2,
+                  height: (MediaQuery.of(context).size.width - 100) / 2,
                 ),
               ),
             ),

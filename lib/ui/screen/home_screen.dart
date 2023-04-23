@@ -72,7 +72,9 @@ class _HomeScreenState extends State<HomeScreen>
             controller: _controller,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              AdoptionSection(),
+              AdoptionSection(
+                manageListingsBloc: manageListingsBloc,
+              ),
               ListingScreen(
                 manageListingsBloc: manageListingsBloc,
               ),

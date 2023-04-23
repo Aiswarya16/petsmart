@@ -11,6 +11,12 @@ class ManageListingsSuccessState extends ManageListingsState {
   ManageListingsSuccessState({required this.listings});
 }
 
+class OthersListingsSuccessState extends ManageListingsState {
+  final List<Map<String, dynamic>> listings;
+
+  OthersListingsSuccessState({required this.listings});
+}
+
 class ManageListingsLoadingState extends ManageListingsState {}
 
 class ManageListingsFailureState extends ManageListingsState {
