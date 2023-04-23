@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pets/ui/widget/custom_card.dart';
+import 'package:pets/ui/widget/custom_icon_button.dart';
 
 import 'custom_button.dart';
 
@@ -54,6 +55,12 @@ class CustomAlertDialog extends StatelessWidget {
                               Theme.of(context).textTheme.titleLarge?.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
+                        ),
+                        CustomIconButton(
+                          iconData: Icons.close,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
                       ],
                     ),

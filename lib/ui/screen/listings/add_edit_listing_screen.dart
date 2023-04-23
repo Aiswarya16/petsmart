@@ -1,17 +1,25 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pets/ui/widget/category_selector.dart';
 import 'package:pets/ui/widget/custom_action_button.dart';
+import 'package:pets/ui/widget/custom_alert_dialog.dart';
 import 'package:pets/ui/widget/custom_button.dart';
 import 'package:pets/ui/widget/custom_card.dart';
 import 'package:pets/ui/widget/gender_selector.dart';
 import 'package:pets/util/custom_file_picker.dart';
+import 'package:pets/util/value_validators.dart';
+
+import '../../../blocs/manage_listings/manage_listings_bloc.dart';
 
 class AddEditListingScreen extends StatefulWidget {
   final Map<String, dynamic>? listingDetails;
+  final ManageListingsBloc manageListingsBloc;
   const AddEditListingScreen({
     super.key,
     this.listingDetails,
+    required this.manageListingsBloc,
   });
 
   @override
@@ -22,7 +30,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _placeController = TextEditingController();
   final TextEditingController _districtController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
@@ -35,14 +43,15 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
 
   String _gender = 'male';
   PlatformFile? selectedFile;
+  int selectedCategoryId = 0;
 
   @override
   void initState() {
     if (widget.listingDetails != null) {
       _titleController.text = widget.listingDetails!['title'];
-      _addressController.text = widget.listingDetails!['address'];
+      _addressController.text = widget.listingDetails!['address_line'];
       _phoneNumberController.text = widget.listingDetails!['phone'];
-      _cityController.text = widget.listingDetails!['city'];
+      _placeController.text = widget.listingDetails!['place'];
       _districtController.text = widget.listingDetails!['district'];
       _stateController.text = widget.listingDetails!['state'];
       _descriptionController.text = widget.listingDetails!['description'];
@@ -50,51 +59,39 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
       _discountedPriceController.text =
           widget.listingDetails!['discounted_price'].toString();
       _ageController.text = widget.listingDetails!['age'];
-      _pinCodeController.text = widget.listingDetails!['pin'].toString();
+      _pinCodeController.text = widget.listingDetails!['pin_code'].toString();
       _gender = widget.listingDetails!['gender'];
+      selectedCategoryId = widget.listingDetails!['category_id'];
     }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.pink,
-          ),
-        ),
-        title: Text(
-          widget.listingDetails != null ? 'Edit Listing' : 'Add Listing',
-          style: GoogleFonts.piazzolla(
-            textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: Colors.pink,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-          ),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              shrinkWrap: true,
+    return SafeArea(
+      child: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
                   height: 20,
                 ),
+                if (widget.listingDetails == null)
+                  CategoriesSelector(
+                    onSelect: (id) {
+                      selectedCategoryId = id;
+                    },
+                    label: 'Select Category',
+                  ),
+                if (widget.listingDetails == null)
+                  const SizedBox(
+                    height: 10,
+                  ),
                 Text(
                   'Title',
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
@@ -106,13 +103,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                 CustomCard(
                   child: TextFormField(
                     controller: _titleController,
-                    validator: (value) {
-                      if (value != null && value.trim().isNotEmpty) {
-                        return null;
-                      } else {
-                        return 'Please enter title';
-                      }
-                    },
+                    validator: alphaNumericValidator,
                     decoration: const InputDecoration(
                       hintText: 'eg.Dog for sale',
                     ),
@@ -131,15 +122,10 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                 const SizedBox(height: 5),
                 CustomCard(
                   child: TextFormField(
-                    maxLines: 2,
+                    minLines: 3,
+                    maxLines: 5,
                     controller: _descriptionController,
-                    validator: (value) {
-                      if (value != null && value.trim().isNotEmpty) {
-                        return null;
-                      } else {
-                        return 'Please enter description';
-                      }
-                    },
+                    validator: alphaNumericValidator,
                     decoration: const InputDecoration(
                       hintText: 'eg.Decription of the pet',
                     ),
@@ -159,13 +145,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                 CustomCard(
                   child: TextFormField(
                     controller: _ageController,
-                    validator: (value) {
-                      if (value != null && value.trim().isNotEmpty) {
-                        return null;
-                      } else {
-                        return 'Please enter age';
-                      }
-                    },
+                    validator: alphaNumericValidator,
                     decoration: const InputDecoration(
                       hintText: 'eg.6 months',
                     ),
@@ -214,13 +194,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               controller: _priceController,
-                              validator: (value) {
-                                if (value != null && value.trim().isNotEmpty) {
-                                  return null;
-                                } else {
-                                  return 'Please enter price';
-                                }
-                              },
+                              validator: numericValidator,
                               decoration: const InputDecoration(
                                 hintText: 'Price in rupees',
                               ),
@@ -249,15 +223,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               controller: _discountedPriceController,
-                              validator: (value) {
-                                if ((value != null &&
-                                        value.trim().isNotEmpty) ||
-                                    widget.listingDetails != null) {
-                                  return null;
-                                } else {
-                                  return 'Please enter discounted price';
-                                }
-                              },
+                              validator: numericValidator,
                               decoration: const InputDecoration(
                                 hintText: 'Price in rupees',
                               ),
@@ -284,13 +250,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                   child: TextFormField(
                     maxLines: 2,
                     controller: _addressController,
-                    validator: (value) {
-                      if (value != null && value.trim().isNotEmpty) {
-                        return null;
-                      } else {
-                        return 'Please enter address';
-                      }
-                    },
+                    validator: alphaNumericValidator,
                     decoration: const InputDecoration(
                       hintText: 'address line 1, address line 2',
                     ),
@@ -320,13 +280,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                           CustomCard(
                             child: TextFormField(
                               controller: _phoneNumberController,
-                              validator: (value) {
-                                if (value != null && value.trim().isNotEmpty) {
-                                  return null;
-                                } else {
-                                  return 'Please enter Phone';
-                                }
-                              },
+                              validator: phoneValidator,
                               decoration: const InputDecoration(
                                 hintText: 'eg. 9876543210',
                               ),
@@ -341,7 +295,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'City',
+                            'Place',
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium
@@ -353,16 +307,8 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                           const SizedBox(height: 5),
                           CustomCard(
                             child: TextFormField(
-                              controller: _cityController,
-                              validator: (value) {
-                                if ((value != null &&
-                                        value.trim().isNotEmpty) ||
-                                    widget.listingDetails != null) {
-                                  return null;
-                                } else {
-                                  return 'Please enter your city';
-                                }
-                              },
+                              controller: _placeController,
+                              validator: alphaNumericValidator,
                               decoration: const InputDecoration(
                                 hintText: 'Kannur',
                               ),
@@ -397,13 +343,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                           CustomCard(
                             child: TextFormField(
                               controller: _districtController,
-                              validator: (value) {
-                                if (value != null && value.trim().isNotEmpty) {
-                                  return null;
-                                } else {
-                                  return 'Please enter your district';
-                                }
-                              },
+                              validator: alphaNumericValidator,
                               decoration: const InputDecoration(
                                 hintText: 'Kannur',
                               ),
@@ -431,15 +371,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                           CustomCard(
                             child: TextFormField(
                               controller: _stateController,
-                              validator: (value) {
-                                if ((value != null &&
-                                        value.trim().isNotEmpty) ||
-                                    widget.listingDetails != null) {
-                                  return null;
-                                } else {
-                                  return 'Please enter your state';
-                                }
-                              },
+                              validator: alphaNumericValidator,
                               decoration: const InputDecoration(
                                 hintText: 'Kerala',
                               ),
@@ -467,14 +399,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                     CustomCard(
                       child: TextFormField(
                         controller: _pinCodeController,
-                        validator: (value) {
-                          if ((value != null && value.trim().isNotEmpty) ||
-                              widget.listingDetails != null) {
-                            return null;
-                          } else {
-                            return 'Please enter pin code';
-                          }
-                        },
+                        validator: numericValidator,
                         decoration: const InputDecoration(
                           hintText: 'eg.123456',
                         ),
@@ -486,71 +411,97 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                   height: 30,
                   color: Color.fromARGB(66, 176, 176, 176),
                 ),
-                CustomActionButton(
-                  iconData: selectedFile != null
-                      ? Icons.check_box_outlined
-                      : Icons.upload_outlined,
-                  color:
-                      selectedFile != null ? Colors.green : Colors.grey[400]!,
-                  onPressed: () async {
-                    PlatformFile? file = await pickFile();
-                    if (file != null) {
-                      selectedFile = file;
-                      setState(() {});
-                    }
-                  },
-                  label: selectedFile != null ? 'Selected' : 'Upload Image',
-                ),
-                const Divider(
-                  height: 30,
-                  color: Color.fromARGB(66, 176, 176, 176),
-                ),
-                CustomActionButton(
-                  iconData: Icons.map_outlined,
-                  color: Colors.purple[200]!,
-                  onPressed: () {},
-                  label: 'Select Location from Map',
-                ),
-                const Divider(
-                  height: 30,
-                  color: Color.fromARGB(66, 176, 176, 176),
-                ),
+                if (widget.listingDetails == null)
+                  CustomActionButton(
+                    iconData: selectedFile != null
+                        ? Icons.check_box_outlined
+                        : Icons.upload_outlined,
+                    color:
+                        selectedFile != null ? Colors.green : Colors.grey[400]!,
+                    onPressed: () async {
+                      PlatformFile? file = await pickFile();
+                      if (file != null) {
+                        selectedFile = file;
+                        setState(() {});
+                      }
+                    },
+                    label: selectedFile != null ? 'Selected' : 'Upload Image',
+                  ),
+                if (widget.listingDetails == null)
+                  const Divider(
+                    height: 30,
+                    color: Color.fromARGB(66, 176, 176, 176),
+                  ),
                 CustomButton(
                   buttonColor: Colors.pink,
                   labelColor: Colors.white,
                   label: widget.listingDetails != null ? 'Save' : 'Add',
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      if (widget.listingDetails != null) {
-                        // BlocProvider.of<PatientBloc>(context).add(
-                        //   EditPatientEvent(
-                        //     patientId: widget.patientDetails!['id'],
-                        //     name: _nameController.text.trim(),
-                        //     phone: _phoneNumberController.text.trim(),
-                        //     address: _addressController.text.trim(),
-                        //     city: _cityController.text.trim(),
-                        //     district: _districtController.text.trim(),
-                        //     dob: _dob!,
-                        //     gender: _gender,
-                        //     state: _stateController.text.trim(),
-                        //   ),
-                        // );
+                      if (selectedCategoryId != 0) {
+                        if (widget.listingDetails != null) {
+                          widget.manageListingsBloc.add(
+                            EditListingsEvent(
+                              listingId: widget.listingDetails!['id'],
+                              title: _titleController.text.trim(),
+                              description: _descriptionController.text.trim(),
+                              age: _ageController.text.trim(),
+                              gender: _gender,
+                              address: _addressController.text.trim(),
+                              phone: _phoneNumberController.text.trim(),
+                              place: _placeController.text.trim(),
+                              district: _districtController.text.trim(),
+                              state: _stateController.text.trim(),
+                              pin: _pinCodeController.text.trim(),
+                              price: int.parse(_priceController.text.trim()),
+                              discountedPrice: int.parse(
+                                  _discountedPriceController.text.trim()),
+                            ),
+                          );
+                          Navigator.pop(context);
+                        } else {
+                          if (selectedFile != null) {
+                            widget.manageListingsBloc.add(
+                              AddListingsEvent(
+                                image: selectedFile!,
+                                title: _titleController.text.trim(),
+                                description: _descriptionController.text.trim(),
+                                age: _ageController.text.trim(),
+                                gender: _gender,
+                                address: _addressController.text.trim(),
+                                phone: _phoneNumberController.text.trim(),
+                                place: _placeController.text.trim(),
+                                district: _districtController.text.trim(),
+                                state: _stateController.text.trim(),
+                                pin: _pinCodeController.text.trim(),
+                                price: int.parse(_priceController.text.trim()),
+                                discountedPrice: int.parse(
+                                    _discountedPriceController.text.trim()),
+                                categoryId: selectedCategoryId,
+                              ),
+                            );
+                            Navigator.pop(context);
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) => const CustomAlertDialog(
+                                title: 'Select Image',
+                                message: 'Please select an image to continue',
+                                primaryButtonLabel: 'Ok',
+                              ),
+                            );
+                          }
+                        }
                       } else {
-                        // BlocProvider.of<PatientBloc>(context).add(
-                        //   AddPatientEvent(
-                        //     name: _nameController.text.trim(),
-                        //     phone: _phoneNumberController.text.trim(),
-                        //     address: _addressController.text.trim(),
-                        //     city: _cityController.text.trim(),
-                        //     district: _districtController.text.trim(),
-                        //     dob: _dob!,
-                        //     gender: _gender,
-                        //     state: _stateController.text.trim(),
-                        //   ),
-                        // );
+                        showDialog(
+                          context: context,
+                          builder: (context) => const CustomAlertDialog(
+                            title: 'Select Category',
+                            message: 'Please select a category to continue',
+                            primaryButtonLabel: 'Ok',
+                          ),
+                        );
                       }
-
-                      Navigator.pop(context);
                     }
                   },
                 ),
@@ -559,7 +510,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                 ),
               ],
             ),
-          ),
+          ],
         ),
       ),
     );

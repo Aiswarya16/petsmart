@@ -1,17 +1,24 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:pets/ui/screen/listings/add_edit_listing_screen.dart';
+import 'package:pets/blocs/manage_listings/manage_listings_bloc.dart';
 import 'package:pets/ui/screen/listings/pet_images_screen.dart';
 import 'package:pets/ui/widget/custom_card.dart';
 import 'package:pets/util/custom_file_picker.dart';
 
+import '../screen/listings/add_edit_listing_screen.dart';
+import 'custom_alert_dialog.dart';
+
 class ListingCard extends StatefulWidget {
+  final ManageListingsBloc manageListingsBloc;
+  final dynamic listingDetails;
   final bool isOnListing;
   final Function() onTap;
   const ListingCard({
     super.key,
     required this.onTap,
     this.isOnListing = false,
+    required this.manageListingsBloc,
+    required this.listingDetails,
   });
 
   @override
@@ -35,8 +42,10 @@ class _ListingCardState extends State<ListingCard> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
-                  'https://images.unsplash.com/photo-1676641244234-855100cee031?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+                  widget.listingDetails['images'][0]['image_url'],
                   fit: BoxFit.cover,
+                  width: MediaQuery.of(context).size.width - 60,
+                  height: MediaQuery.of(context).size.width - 60,
                 ),
               ),
             ),
@@ -44,7 +53,7 @@ class _ListingCardState extends State<ListingCard> {
               height: 10,
             ),
             Text(
-              'Dobermann for sale',
+              widget.listingDetails['title'],
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: Colors.black,
                   ),
@@ -53,7 +62,7 @@ class _ListingCardState extends State<ListingCard> {
               height: 2.5,
             ),
             Text(
-              'Male',
+              widget.listingDetails['gender'],
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: Colors.grey[800],
                   ),
@@ -62,7 +71,7 @@ class _ListingCardState extends State<ListingCard> {
               height: 2.5,
             ),
             Text(
-              '1 year',
+              widget.listingDetails['age'],
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: Colors.grey[800],
                   ),
@@ -78,7 +87,7 @@ class _ListingCardState extends State<ListingCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '₹20000',
+                        '₹${widget.listingDetails['price'].toString()}',
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               color: Colors.red[800],
                               decoration: TextDecoration.lineThrough,
@@ -88,7 +97,7 @@ class _ListingCardState extends State<ListingCard> {
                         height: 2.5,
                       ),
                       Text(
-                        '₹15000',
+                        '₹${widget.listingDetails['discounted_price'].toString()}',
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   color: Colors.green,
@@ -150,11 +159,17 @@ class _ListingCardState extends State<ListingCard> {
                       IconButton(
                         splashRadius: 1,
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const AddEditListingScreen(),
+                          showDialog(
+                            context: context,
+                            builder: (context) => CustomAlertDialog(
+                              title: 'Listing',
+                              message: 'Enter the following details',
+                              content: Flexible(
+                                child: AddEditListingScreen(
+                                  manageListingsBloc: widget.manageListingsBloc,
+                                  listingDetails: widget.listingDetails,
+                                ),
+                              ),
                             ),
                           );
                         },
@@ -188,8 +203,8 @@ class _ListingCardState extends State<ListingCard> {
                 : const SizedBox(),
             widget.isOnListing
                 ? Text(
-                    'Pending',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    widget.listingDetails['status'],
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,
                         ),

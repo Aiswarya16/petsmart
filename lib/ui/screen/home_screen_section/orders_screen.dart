@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pets/blocs/manage_listings/manage_listings_bloc.dart';
 import 'package:pets/ui/screen/pet_details_screen.dart';
 import 'package:pets/ui/widget/listing_card.dart';
 
@@ -71,6 +72,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   children: List<Widget>.generate(
                     10,
                     (index) => ListingCard(
+                      listingDetails: {},
+                      manageListingsBloc: ManageListingsBloc(),
                       onTap: () {
                         Navigator.push(
                           context,

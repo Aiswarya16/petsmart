@@ -7,6 +7,7 @@ import 'package:pets/ui/widget/custom_alert_dialog.dart';
 import 'package:pets/ui/widget/custom_button.dart';
 import 'package:pets/ui/widget/custom_card.dart';
 import 'package:pets/ui/widget/custom_input_form_field.dart';
+import 'package:pets/util/value_validators.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -90,126 +91,125 @@ class _LoginScreenState extends State<LoginScreen> {
                             key: _formKey,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
+                            child: ListView(
+                              shrinkWrap: true,
                               children: [
-                                const Center(
-                                  child: Branding(),
-                                ),
-                                const Divider(
-                                  color: Colors.grey,
-                                  height: 40,
-                                  thickness: 0.5,
-                                ),
-                                Text(
-                                  'Login',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall!
-                                      .copyWith(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Enter email and password to login',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelLarge!
-                                      .copyWith(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                CustomInputFormField(
-                                  controller: _emailController,
-                                  prefixIcon: Icons.email,
-                                  labelText: 'Email',
-                                  validator: (value) {
-                                    if (value != null &&
-                                        value.trim().isNotEmpty) {
-                                      return null;
-                                    } else {
-                                      return "Please enter an email";
-                                    }
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                CustomInputFormField(
-                                  controller: _passwordController,
-                                  isObscure: isObscure,
-                                  labelText: 'Password',
-                                  prefixIcon: Icons.lock,
-                                  validator: (value) {
-                                    if (value != null &&
-                                        value.trim().isNotEmpty) {
-                                      return null;
-                                    } else {
-                                      return "Please enter password";
-                                    }
-                                  },
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      isObscure = !isObscure;
-                                      setState(() {});
-                                    },
-                                    icon: Icon(
-                                      isObscure
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                      color: Colors.pink,
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Center(
+                                      child: Branding(),
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                CustomButton(
-                                  label: 'Login',
-                                  buttonColor: Colors.pink,
-                                  labelColor: Colors.white,
-                                  isLoading: state is SignInLoadingState,
-                                  onTap: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      String email =
-                                          _emailController.text.trim();
-                                      String password =
-                                          _passwordController.text.trim();
-
-                                      BlocProvider.of<SignInBloc>(context).add(
-                                        SignInEvent(
-                                          email: email,
-                                          password: password,
+                                    const Divider(
+                                      color: Colors.grey,
+                                      height: 40,
+                                      thickness: 0.5,
+                                    ),
+                                    Text(
+                                      'Login',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall!
+                                          .copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      'Enter email and password to login',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge!
+                                          .copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    CustomInputFormField(
+                                      controller: _emailController,
+                                      prefixIcon: Icons.email,
+                                      labelText: 'Email',
+                                      validator: emailValidator,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    CustomInputFormField(
+                                      controller: _passwordController,
+                                      isObscure: isObscure,
+                                      labelText: 'Password',
+                                      prefixIcon: Icons.lock,
+                                      validator: (value) {
+                                        if (value != null &&
+                                            value.trim().isNotEmpty) {
+                                          return null;
+                                        } else {
+                                          return "Please enter password";
+                                        }
+                                      },
+                                      suffixIcon: IconButton(
+                                        onPressed: () {
+                                          isObscure = !isObscure;
+                                          setState(() {});
+                                        },
+                                        icon: Icon(
+                                          isObscure
+                                              ? Icons.visibility_off
+                                              : Icons.visibility,
+                                          color: Colors.pink,
                                         ),
-                                      );
-                                    }
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                CustomButton(
-                                  label: 'Register',
-                                  buttonColor: Colors.blue,
-                                  labelColor: Colors.white,
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SignUpScreen(),
                                       ),
-                                    );
-                                  },
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    CustomButton(
+                                      label: 'Login',
+                                      buttonColor: Colors.pink,
+                                      labelColor: Colors.white,
+                                      isLoading: state is SignInLoadingState,
+                                      onTap: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          String email =
+                                              _emailController.text.trim();
+                                          String password =
+                                              _passwordController.text.trim();
+
+                                          BlocProvider.of<SignInBloc>(context)
+                                              .add(
+                                            SignInEvent(
+                                              email: email,
+                                              password: password,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    CustomButton(
+                                      label: 'Register',
+                                      buttonColor: Colors.blue,
+                                      labelColor: Colors.white,
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const SignUpScreen(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

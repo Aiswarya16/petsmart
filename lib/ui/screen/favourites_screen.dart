@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pets/blocs/manage_listings/manage_listings_bloc.dart';
 import 'package:pets/ui/screen/pet_details_screen.dart';
 import 'package:pets/ui/widget/listing_card.dart';
 
@@ -59,6 +60,8 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
                     children: List<Widget>.generate(
                       10,
                       (index) => ListingCard(
+                        listingDetails: {},
+                        manageListingsBloc: ManageListingsBloc(),
                         onTap: () {
                           Navigator.push(
                             context,
