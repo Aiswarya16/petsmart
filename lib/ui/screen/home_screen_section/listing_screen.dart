@@ -38,6 +38,10 @@ class _ListingScreenState extends State<ListingScreen> {
               title: 'Failed',
               message: state.message,
               primaryButtonLabel: 'Ok',
+              primaryOnPressed: () {
+                widget.manageListingsBloc.add(GetAllListingsEvent());
+                Navigator.pop(context);
+              },
             ),
           );
         }

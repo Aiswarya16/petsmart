@@ -1,13 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pets/blocs/manage_listings/manage_listings_bloc.dart';
 import 'package:pets/ui/widget/custom_progress_indicator.dart';
 
 class PetImagesScreen extends StatefulWidget {
-  final List<Map<String, dynamic>> images;
+  final List<dynamic> images;
+  final ManageListingsBloc manageListingsBloc;
   const PetImagesScreen({
     super.key,
     required this.images,
+    required this.manageListingsBloc,
   });
 
   @override
@@ -58,7 +61,7 @@ class _PetImagesScreenState extends State<PetImagesScreen> {
                   alignment: WrapAlignment.center,
                   runAlignment: WrapAlignment.center,
                   children: List<Widget>.generate(
-                    10,
+                    widget.images.length,
                     (index) => Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -69,8 +72,7 @@ class _PetImagesScreenState extends State<PetImagesScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://images.unsplash.com/photo-1676641244234-855100cee031?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+                                imageUrl: widget.images[index]['image_url'],
                                 fit: BoxFit.cover,
                                 height: MediaQuery.of(context).size.width - 40,
                                 width: MediaQuery.of(context).size.width - 40,
@@ -80,26 +82,33 @@ class _PetImagesScreenState extends State<PetImagesScreen> {
                                 ),
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 10,
-                                  top: 10,
-                                ),
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white,
-                                  child: IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.delete_forever_outlined,
-                                      color: Colors.red,
+                            if (index > 0)
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 10,
+                                    top: 10,
+                                  ),
+                                  child: Material(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.white,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        widget.manageListingsBloc.add(
+                                            DeleteImageListingsEvent(
+                                                imageId: widget.images[index]
+                                                    ['id']));
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(
+                                        Icons.delete_forever_outlined,
+                                        color: Colors.red,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
                           ],
                         ),
                       ),

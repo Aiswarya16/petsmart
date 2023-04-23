@@ -104,9 +104,9 @@ class ManageListingsBloc
 
           add(GetAllListingsEvent());
         } else if (event is UploadImageListingsEvent) {
-          String path = await supabaseClient.storage.from('docs').uploadBinary(
+          String path = await supabaseClient.storage.from('docs').upload(
                 'listings/${DateTime.now().millisecondsSinceEpoch.toString()}${event.image.name}',
-                event.image.bytes!,
+                File(event.image.path!),
               );
 
           path = path.replaceRange(0, 5, '');

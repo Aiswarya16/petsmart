@@ -124,7 +124,14 @@ class _ListingCardState extends State<ListingCard> {
                         splashRadius: 1,
                         onPressed: () async {
                           PlatformFile? file = await pickFile();
-                          if (file != null) {}
+                          if (file != null) {
+                            widget.manageListingsBloc.add(
+                              UploadImageListingsEvent(
+                                listingId: widget.listingDetails['id'],
+                                image: file,
+                              ),
+                            );
+                          }
                         },
                         icon: const Icon(
                           Icons.add_a_photo_outlined,
@@ -141,8 +148,9 @@ class _ListingCardState extends State<ListingCard> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const PetImagesScreen(
-                                images: [],
+                              builder: (context) => PetImagesScreen(
+                                images: widget.listingDetails['images'],
+                                manageListingsBloc: widget.manageListingsBloc,
                               ),
                             ),
                           );
@@ -184,7 +192,10 @@ class _ListingCardState extends State<ListingCard> {
                       ),
                       IconButton(
                         splashRadius: 1,
-                        onPressed: () {},
+                        onPressed: () {
+                          widget.manageListingsBloc.add(DeleteListingsEvent(
+                              listingId: widget.listingDetails['id']));
+                        },
                         icon: const Icon(
                           Icons.delete_forever_outlined,
                           color: Colors.red,
