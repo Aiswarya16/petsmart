@@ -115,3 +115,11 @@ class FavoriteListingsEvent extends ManageListingsEvent {
     required this.favorite,
   });
 }
+
+class OrderListingsEvent extends ManageListingsEvent {
+  final int listingId;
+
+  OrderListingsEvent({
+    required this.listingId,
+  });
+}

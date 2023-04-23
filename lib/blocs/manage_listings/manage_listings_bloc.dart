@@ -32,23 +32,27 @@ class ManageListingsBloc
                 .neq('by_user_id', supabaseClient.auth.currentUser!.id)
                 .ilike('title', '%${event.query}%')
                 .eq('category_id', event.categoryId)
+                .eq('status', 'pending')
                 .order('title', ascending: true);
           } else if (event.query != null) {
             temp = await queryTable
                 .select('*')
                 .neq('by_user_id', supabaseClient.auth.currentUser!.id)
                 .ilike('title', '%${event.query}%')
+                .eq('status', 'pending')
                 .order('title', ascending: true);
           } else if (event.categoryId != null) {
             temp = await queryTable
                 .select('*')
                 .neq('by_user_id', supabaseClient.auth.currentUser!.id)
                 .eq('category_id', event.categoryId)
+                .eq('status', 'pending')
                 .order('title', ascending: true);
           } else {
             temp = await queryTable
                 .select('*')
                 .neq('by_user_id', supabaseClient.auth.currentUser!.id)
+                .eq('status', 'pending')
                 .order('title', ascending: true);
           }
 
@@ -96,6 +100,16 @@ class ManageListingsBloc
                 .eq('pet_listing_id', event.listingId)
                 .eq('user_id', supabaseClient.auth.currentUser!.id);
           }
+
+          add(GetOthersListingsEvent());
+        } else if (event is OrderListingsEvent) {
+          await queryTable.update(
+            {
+              'bought_at': DateTime.now().toIso8601String(),
+              'bought_by': supabaseClient.auth.currentUser!.id,
+              'status': 'ordered',
+            },
+          ).eq('id', event.listingId);
 
           add(GetOthersListingsEvent());
         } else if (event is GetAllListingsEvent) {

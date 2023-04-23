@@ -2,10 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:pets/blocs/manage_listings/manage_listings_bloc.dart';
 import 'package:pets/ui/widget/custom_action_button.dart';
 import 'package:pets/ui/widget/custom_icon_button.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../widget/custom_alert_dialog.dart';
 
 class PetDetailsScreen extends StatefulWidget {
   final ManageListingsBloc manageListingsBloc;
@@ -26,6 +31,71 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
   void initState() {
     super.initState();
     isFavorite = widget.listDetails['favorite'];
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  final Razorpay _razorpay = Razorpay();
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    await showDialog(
+      context: context,
+      builder: (context) => const CustomAlertDialog(
+        title: 'Payment Success',
+        message:
+            'Thank you for the payment, you can find your order in the orders section.',
+        primaryButtonLabel: 'Ok',
+      ),
+    );
+
+    widget.manageListingsBloc.add(
+      OrderListingsEvent(
+        listingId: widget.listDetails['id'],
+      ),
+    );
+
+    Navigator.pop(context);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Logger().e(response.error);
+    showDialog(
+      context: context,
+      builder: (context) => CustomAlertDialog(
+        title: 'Payment Failed',
+        message: response.message ?? 'Something went wrong, Please try again',
+        primaryButtonLabel: 'Ok',
+      ),
+    );
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet was selected
+  }
+
+  void makePayment() async {
+    // String orderId = await createOrder(widget.testDetails['total_price']);
+
+    var options = {
+      'key': 'rzp_test_j07YpjyCexi5xr',
+      'amount': (widget.listDetails['discounted_price']) * 100,
+      'name': 'PetsMart',
+      // 'order_id': orderId,
+      'description': '#${widget.listDetails['title']}',
+      'prefill': {
+        'contact': '9999999999',
+        'email': Supabase.instance.client.auth.currentUser!.email,
+      }
+    };
+    Logger().w(options);
+    _razorpay.open(options);
+  }
+
+  @override
+  void dispose() {
+    _razorpay.clear(); // Removes all listeners
+    super.dispose();
   }
 
   @override
@@ -289,7 +359,9 @@ class _PetDetailsScreenState extends State<PetDetailsScreen> {
                         flex: 3,
                         child: CustomActionButton(
                           iconData: Icons.pets_outlined,
-                          onPressed: () {},
+                          onPressed: () {
+                            makePayment();
+                          },
                           label: 'Adopt',
                         ),
                       ),
