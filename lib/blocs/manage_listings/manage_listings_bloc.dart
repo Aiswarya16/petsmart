@@ -195,6 +195,13 @@ class ManageListingsBloc
             listings[i]['images'] = await imageTable
                 .select('*')
                 .eq('pet_listing_id', listings[i]['id']);
+
+            if (listings[i]['bought_by'] != null) {
+              listings[i]['bought_user'] = await profileTable
+                  .select('*')
+                  .eq('user_id', listings[i]['bought_by'])
+                  .single();
+            }
           }
           emit(
             ManageListingsSuccessState(

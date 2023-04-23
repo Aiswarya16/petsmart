@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pets/blocs/manage_listings/manage_listings_bloc.dart';
 import 'package:pets/ui/screen/listings/pet_images_screen.dart';
 import 'package:pets/ui/widget/custom_card.dart';
+import 'package:pets/ui/widget/label_with_text.dart';
 import 'package:pets/util/custom_file_picker.dart';
 
 import '../screen/listings/add_edit_listing_screen.dart';
@@ -109,14 +110,14 @@ class _ListingCardState extends State<ListingCard> {
                 ),
               ],
             ),
-            widget.isOnListing
+            widget.isOnListing && widget.listingDetails['status'] == 'pending'
                 ? const Divider(
                     color: Colors.white,
                     thickness: 1,
                     height: 20,
                   )
                 : const SizedBox(),
-            widget.isOnListing
+            widget.isOnListing && widget.listingDetails['status'] == 'pending'
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -213,12 +214,42 @@ class _ListingCardState extends State<ListingCard> {
                   )
                 : const SizedBox(),
             widget.isOnListing
-                ? Text(
-                    widget.listingDetails['status'],
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.listingDetails['status']
+                            .toString()
+                            .toUpperCase(),
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
+                  )
+                : const SizedBox(),
+            widget.isOnListing && widget.listingDetails['status'] != 'pending'
+                ? const Divider(
+                    color: Colors.white,
+                    thickness: 1,
+                    height: 20,
+                  )
+                : const SizedBox(),
+            widget.isOnListing && widget.listingDetails['status'] != 'pending'
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      LabelWithText(
+                        label: 'Bought By',
+                        text: widget.listingDetails['bought_user']['name'],
+                      ),
+                      LabelWithText(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        label: 'Phone Number',
+                        text: widget.listingDetails['bought_user']['phone'],
+                      ),
+                    ],
                   )
                 : const SizedBox(),
           ],
