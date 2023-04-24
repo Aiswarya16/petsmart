@@ -159,7 +159,7 @@ class _AdoptionSectionState extends State<AdoptionSection> {
                         ? GridView.count(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            childAspectRatio: 1 / 1.65,
+                            childAspectRatio: 1 / 1.75,
                             crossAxisCount: 2,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
