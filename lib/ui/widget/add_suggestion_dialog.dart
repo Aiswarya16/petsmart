@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pets/blocs/suggestion/suggestion_bloc.dart';
 import 'package:pets/ui/widget/custom_alert_dialog.dart';
+import 'package:pets/util/value_validators.dart';
 
 class AddSuggestionDialog extends StatefulWidget {
   const AddSuggestionDialog({
@@ -29,13 +30,7 @@ class _AddSuggestionDialogState extends State<AddSuggestionDialog> {
             TextFormField(
               controller: _suggestionController,
               maxLines: 3,
-              validator: (value) {
-                if (value != null && value.trim().isNotEmpty) {
-                  return null;
-                } else {
-                  return 'Enter suggestion';
-                }
-              },
+              validator: alphanumericWithSpecialCharsValidator,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),

@@ -101,7 +101,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                 CustomCard(
                   child: TextFormField(
                     controller: _titleController,
-                    validator: alphaNumericValidator,
+                    validator: alphanumericWithSpaceValidator,
                     decoration: const InputDecoration(
                       hintText: 'eg.Dog for sale',
                     ),
@@ -123,7 +123,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                     minLines: 3,
                     maxLines: 5,
                     controller: _descriptionController,
-                    validator: alphaNumericValidator,
+                    validator: alphanumericWithSpecialCharsValidator,
                     decoration: const InputDecoration(
                       hintText: 'eg.Decription of the pet',
                     ),
@@ -143,7 +143,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                 CustomCard(
                   child: TextFormField(
                     controller: _ageController,
-                    validator: alphaNumericValidator,
+                    validator: alphanumericWithSpaceValidator,
                     decoration: const InputDecoration(
                       hintText: 'eg.6 months',
                     ),
@@ -248,7 +248,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                   child: TextFormField(
                     maxLines: 2,
                     controller: _addressController,
-                    validator: alphaNumericValidator,
+                    validator: alphanumericWithSpecialCharsValidator,
                     decoration: const InputDecoration(
                       hintText: 'address line 1, address line 2',
                     ),
@@ -278,7 +278,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                           CustomCard(
                             child: TextFormField(
                               controller: _phoneNumberController,
-                              validator: phoneValidator,
+                              validator: phoneNumberValidator,
                               decoration: const InputDecoration(
                                 hintText: 'eg. 9876543210',
                               ),
@@ -306,7 +306,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                           CustomCard(
                             child: TextFormField(
                               controller: _placeController,
-                              validator: alphaNumericValidator,
+                              validator: alphanumericWithSpaceValidator,
                               decoration: const InputDecoration(
                                 hintText: 'Kannur',
                               ),
@@ -341,7 +341,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                           CustomCard(
                             child: TextFormField(
                               controller: _districtController,
-                              validator: alphaNumericValidator,
+                              validator: alphanumericValidator,
                               decoration: const InputDecoration(
                                 hintText: 'Kannur',
                               ),
@@ -369,7 +369,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                           CustomCard(
                             child: TextFormField(
                               controller: _stateController,
-                              validator: alphaNumericValidator,
+                              validator: alphanumericValidator,
                               decoration: const InputDecoration(
                                 hintText: 'Kerala',
                               ),
@@ -397,7 +397,7 @@ class _AddEditListingScreenState extends State<AddEditListingScreen> {
                     CustomCard(
                       child: TextFormField(
                         controller: _pinCodeController,
-                        validator: numericValidator,
+                        validator: pincodeValidator,
                         decoration: const InputDecoration(
                           hintText: 'eg.123456',
                         ),

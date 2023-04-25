@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pets/blocs/complaint/complaint_bloc.dart';
 import 'package:pets/ui/widget/custom_alert_dialog.dart';
+import 'package:pets/util/value_validators.dart';
 
 class AddComplaintDialog extends StatefulWidget {
   const AddComplaintDialog({
@@ -29,13 +30,7 @@ class _AddComplaintDialogState extends State<AddComplaintDialog> {
             TextFormField(
               controller: _complaintController,
               maxLines: 3,
-              validator: (value) {
-                if (value != null && value.trim().isNotEmpty) {
-                  return null;
-                } else {
-                  return 'Enter complaint';
-                }
-              },
+              validator: alphanumericWithSpecialCharsValidator,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),

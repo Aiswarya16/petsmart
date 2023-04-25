@@ -6,6 +6,7 @@ import 'package:pets/ui/widget/custom_alert_dialog.dart';
 import 'package:pets/ui/widget/custom_button.dart';
 import 'package:pets/ui/widget/custom_card.dart';
 import 'package:pets/ui/widget/custom_input_form_field.dart';
+import 'package:pets/util/value_validators.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -144,18 +145,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 20,
                                 ),
                                 CustomInputFormField(
-                                  controller: _emailController,
-                                  prefixIcon: Icons.email,
-                                  labelText: 'Email',
-                                  validator: (value) {
-                                    if (value != null &&
-                                        value.trim().isNotEmpty) {
-                                      return null;
-                                    } else {
-                                      return "Please enter an email";
-                                    }
-                                  },
-                                ),
+                                    controller: _emailController,
+                                    prefixIcon: Icons.email,
+                                    labelText: 'Email',
+                                    validator: emailValidator),
                                 const SizedBox(
                                   height: 10,
                                 ),
@@ -164,14 +157,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   isObscure: isObscure,
                                   labelText: 'Password',
                                   prefixIcon: Icons.lock,
-                                  validator: (value) {
-                                    if (value != null &&
-                                        value.trim().isNotEmpty) {
-                                      return null;
-                                    } else {
-                                      return "Please enter password";
-                                    }
-                                  },
+                                  validator: passwordValidator,
                                   suffixIcon: IconButton(
                                     onPressed: () {
                                       isObscure = !isObscure;
@@ -194,49 +180,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   labelText: 'Confirm Password',
                                   prefixIcon: Icons.lock,
                                   validator: (value) {
-                                    if (value != null &&
-                                        value.trim().isNotEmpty &&
-                                        _passwordController.text == value) {
-                                      return null;
-                                    } else {
-                                      return "Password is not matching";
-                                    }
+                                    return confirmPasswordValidator(
+                                        value, _passwordController.text);
                                   },
                                 ),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 CustomInputFormField(
-                                  controller: _nameController,
-                                  labelText: 'Name',
-                                  prefixIcon: Icons.person,
-                                  validator: (value) {
-                                    if (value != null &&
-                                        value.trim().isNotEmpty) {
-                                      return null;
-                                    } else {
-                                      return "Please enter name";
-                                    }
-                                  },
-                                ),
+                                    controller: _nameController,
+                                    labelText: 'Name',
+                                    prefixIcon: Icons.person,
+                                    validator: alphanumericWithSpaceValidator),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 CustomInputFormField(
-                                  controller: _phoneController,
-                                  labelText: 'Phone',
-                                  keyboardType: TextInputType.phone,
-                                  prefixIcon: Icons.phone_android,
-                                  validator: (value) {
-                                    if (value != null &&
-                                        value.trim().isNotEmpty &&
-                                        value.length == 10) {
-                                      return null;
-                                    } else {
-                                      return "Please enter phone number";
-                                    }
-                                  },
-                                ),
+                                    controller: _phoneController,
+                                    labelText: 'Phone',
+                                    keyboardType: TextInputType.phone,
+                                    prefixIcon: Icons.phone_android,
+                                    validator: phoneNumberValidator),
                                 const SizedBox(
                                   height: 10,
                                 ),
